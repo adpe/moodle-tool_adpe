@@ -34,6 +34,6 @@ $PAGE->set_heading(get_string('pluginname', 'tool_adpe'));
 
 echo $OUTPUT->header();
 
-echo 'Hello World!';
+echo get_string('helloworld', 'tool_adpe');
 
 echo $OUTPUT->footer();
