@@ -21,19 +21,25 @@
  */
  
 require_once(__DIR__ . '/../../../config.php');
-//require_once($CFG->libdir.'/moodlelib.php');
-//require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir.'/adminlib.php');
 
+admin_externalpage_setup('tool_adpe');
 
 $url = new moodle_url('/admin/tool/adpe/index.php');
-$PAGE->set_context(context_system::instance());
+$title = get_string('pluginname', 'tool_adpe');
+$pagetitle = $title;
 $PAGE->set_url($url);
-$PAGE->set_pagelayout('admin');
-$PAGE->set_title('Hello to this adpe plugin');
-$PAGE->set_heading(get_string('pluginname', 'tool_adpe'));
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+
+$OUTPUT = $PAGE->get_renderer('tool_adpe');
 
 echo $OUTPUT->header();
 
-echo get_string('helloworld', 'tool_adpe');
+$renderable = new \tool_adpe\output\index_page($pagetitle, 'This is the sub-heading');
+echo $OUTPUT->render($renderable);
+
+echo html_writer::div(get_string('helloworld', 'tool_adpe'));
+echo html_writer::div(get_string('courseid', 'tool_adpe'));
 
 echo $OUTPUT->footer();

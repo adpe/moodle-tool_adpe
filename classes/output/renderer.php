@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,10 +20,22 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace tool_adpe\output;
 
-$plugin->version = 2018111601;
-$plugin->requires = 2018051700;
-$plugin->component = 'tool_adpe';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.2';
+defined('MOODLE_INTERNAL') || die;                                                                                                  
+ 
+use plugin_renderer_base;  
+
+class renderer extends plugin_renderer_base {
+    /**
+     * Defer to template.
+     *
+     * @param index_page $page
+     *
+     * @return string html for the page
+     */
+    public function render_index_page($page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('tool_adpe/index_page', $data);
+    }
+}
