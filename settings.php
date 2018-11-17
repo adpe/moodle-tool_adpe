@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,15 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the language strings of the plugin.
+ * Add page to admin menu.
  *
  * @package   tool_adpe
  * @copyright 2018, Adrian Perez <p.adrian@gmx.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die;
 
-defined('MOODLE_INTERNAL') || die();
-
-$string['pluginname'] = 'My first Moodle admin plugin';
-$string['helloworld'] = 'Hello World!';
-$string['courseid'] = 'The site was open from course with id: {$a}.';
+if ($hassiteconfig) { // Needs this condition or there is error on login page.
+    $ADMIN->add('server', new admin_externalpage('tool_adpe',
+            get_string('pluginname', 'tool_adpe'),
+            new moodle_url('/admin/tool/adpe/index.php')));
+}

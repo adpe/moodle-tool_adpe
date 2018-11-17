@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the language strings of the plugin.
+ * Modify navigation nodes.
  *
  * @package   tool_adpe
  * @copyright 2018, Adrian Perez <p.adrian@gmx.ch>
@@ -24,6 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'My first Moodle admin plugin';
-$string['helloworld'] = 'Hello World!';
-$string['courseid'] = 'The site was open from course with id: {$a}.';
+function tool_adpe_extend_navigation_course(navigation_node $navigation) {
+    global $PAGE;
+
+    $navigation->add(
+            get_string('pluginname', 'tool_adpe'),
+            new moodle_url('/admin/tool/adpe/index.php', ['id' => $PAGE->course->id]),
+            navigation_node::TYPE_SETTING,
+            get_string('pluginname', 'tool_adpe'),
+            'adpe',
+            new pix_icon('icon', '', 'tool_adpe')
+    );
+}

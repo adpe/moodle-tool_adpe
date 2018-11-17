@@ -15,15 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the language strings of the plugin.
- *
  * @package   tool_adpe
  * @copyright 2018, Adrian Perez <p.adrian@gmx.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+ 
+require_once(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir.'/adminlib.php');
 
-defined('MOODLE_INTERNAL') || die();
+admin_externalpage_setup('tool_adpe');
 
-$string['pluginname'] = 'My first Moodle admin plugin';
-$string['helloworld'] = 'Hello World!';
-$string['courseid'] = 'The site was open from course with id: {$a}.';
+$url = new moodle_url('/admin/tool/adpe/index.php');
+$title = get_string('pluginname', 'tool_adpe');
+$pagetitle = $title;
+$courseid = $_GET['id'];
+$PAGE->set_url($url, ['id' => required_param('id', PARAM_INT)]);
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+
+$OUTPUT = $PAGE->get_renderer('tool_adpe');
+
+echo $OUTPUT->header();
+
+$renderable = new \tool_adpe\output\index_page($pagetitle, 'This is the sub-heading');
+echo $OUTPUT->render($renderable);
+
+echo html_writer::div(get_string('helloworld', 'tool_adpe'));
+echo html_writer::div(get_string('courseid', 'tool_adpe', $courseid));
+
+echo $OUTPUT->footer();
