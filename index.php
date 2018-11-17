@@ -28,7 +28,8 @@ admin_externalpage_setup('tool_adpe');
 $url = new moodle_url('/admin/tool/adpe/index.php');
 $title = get_string('pluginname', 'tool_adpe');
 $pagetitle = $title;
-$PAGE->set_url($url);
+$courseid = $_GET['id'];
+$PAGE->set_url($url, ['id' => required_param('id', PARAM_INT)]);
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
@@ -40,6 +41,6 @@ $renderable = new \tool_adpe\output\index_page($pagetitle, 'This is the sub-head
 echo $OUTPUT->render($renderable);
 
 echo html_writer::div(get_string('helloworld', 'tool_adpe'));
-echo html_writer::div(get_string('courseid', 'tool_adpe'));
+echo html_writer::div(get_string('courseid', 'tool_adpe', $courseid));
 
 echo $OUTPUT->footer();
