@@ -22,17 +22,19 @@
 
 namespace tool_adpe\output;
 
+defined('MOODLE_INTERNAL') || die;
+
 use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
 
 class index_page implements renderable, templatable {
-    /** @var string $sometext Some text to show how to pass data to a template. */
-    var $heading = null;
-    var $sometext = null;
+    // @var string $sometext Some text to show how to pass data to a template.
+    private $heading = null;
+    private $sometext = null;
 
-    public function __construct($heading,$sometext) {
+    public function __construct($heading, $sometext) {
         $this->heading = $heading;
         $this->sometext = $sometext;
     }
