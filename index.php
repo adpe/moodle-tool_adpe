@@ -42,5 +42,23 @@ echo $OUTPUT->render($renderable);
 
 echo html_writer::div(get_string('helloworld', 'tool_adpe'));
 echo html_writer::div(get_string('courseid', 'tool_adpe', $courseid));
+echo html_writer::empty_tag('hr');
+
+$users = $DB->get_records_sql('SELECT firstname, lastname, email FROM {user}');
+
+$cnt = 1;
+foreach ($users as $user) {
+    echo html_writer::start_div();
+    echo html_writer::label("User " . $cnt . ":", 'userinfo'.$cnt);
+    echo html_writer::start_tag('p', array('class' => 'userinfo'.$cnt));
+    echo html_writer::span("Firstname is: " . $user->firstname);
+    echo html_writer::empty_tag('br');
+    echo html_writer::span("Lastname is: " . $user->lastname);
+    echo html_writer::empty_tag('br');
+    echo html_writer::span("Email is: " . $user->email);
+    echo html_writer::end_tag('p');
+    echo html_writer::end_div();
+    $cnt++;
+}
 
 echo $OUTPUT->footer();

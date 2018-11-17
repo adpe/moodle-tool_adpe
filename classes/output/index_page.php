@@ -30,7 +30,7 @@ use templatable;
 use stdClass;
 
 class index_page implements renderable, templatable {
-    // @var string $sometext Some text to show how to pass data to a template.
+    // Strings to show how to pass data to a template.
     private $heading = null;
     private $sometext = null;
 
