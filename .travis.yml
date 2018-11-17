@@ -2,10 +2,6 @@ language: php
 
 sudo: false
 
-branches:
-  only:
-  - master
-
 ignore:
   - *.md
 
