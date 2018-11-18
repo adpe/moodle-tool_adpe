@@ -22,8 +22,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2018111701;
+$plugin->version = 2018111800;
 $plugin->requires = 2018051700;
 $plugin->component = 'tool_adpe';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.4';
+$plugin->release = '1.5';

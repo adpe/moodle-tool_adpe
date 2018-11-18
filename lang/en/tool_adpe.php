@@ -25,5 +25,14 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'My first Moodle admin plugin';
-$string['helloworld'] = 'Hello World!';
-$string['courseid'] = 'The site was open from course with id: {$a}.';
+$string['sometext'] = 'This is my first try with mustache template.';
+$string['header_courseid'] = '<h4>This is a simple text output with a variable:</h4>';
+$string['output_courseid'] = 'The site was open from course with id: <b>{$a}.</b>';
+$string['header_simpledb'] = '<h4>This is a simple DB output of all users on this Moodle platform:</h4>';
+$string['output_simpledb_usercnt'] = '<b>User {$a}:</b><br />';
+$string['output_simpledb_firstname'] = 'Firstname: {$a}<br />';
+$string['output_simpledb_lastname'] = 'Lastname: {$a}<br />';
+$string['output_simpledb_email'] = 'Email: {$a}';
+$string['header_sqltable'] = '<h4>This is the plugin data table for this course:</h4>';
+$string['output_sqltable_yes'] = "Yes";
+$string['output_sqltable_no'] = "No";
