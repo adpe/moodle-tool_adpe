@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 function xmldb_tool_adpe_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
@@ -64,7 +66,6 @@ function xmldb_tool_adpe_upgrade($oldversion) {
 
         // Define index unique index (unique) to be added to tool_adpe.
         $index = new xmldb_index('unique index', XMLDB_INDEX_UNIQUE, array('courseid', 'name'));
-
 
         // Conditionally launch add index unique index.
         if (!$dbman->index_exists($table, $index)) {
