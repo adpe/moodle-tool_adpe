@@ -23,13 +23,10 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 
-admin_externalpage_setup('tool_adpe');
 
 $url = new moodle_url('/admin/tool/adpe/index.php');
 $title = get_string('pluginname', 'tool_adpe');
 $pagetitle = $title;
-$PAGE->set_title($title);
-$PAGE->set_heading($title);
 
 // Default courseid is the frontpage.
 $courseid = 1;
@@ -37,7 +34,17 @@ $courseid = 1;
 if (isset($_GET['id'])) {
     $courseid = $_GET['id'];
     $PAGE->set_url($url, ['id' => required_param('id', PARAM_INT)]);
+} else {
+    $PAGE->set_url($url);
 }
+
+$context = context_course::instance($courseid);
+
+require_login($courseid);
+require_capability('tool/adpe:view', $context, $USER->id);
+
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
 
 $OUTPUT = $PAGE->get_renderer('tool_adpe');
 
