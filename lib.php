@@ -27,8 +27,9 @@ defined('MOODLE_INTERNAL') || die();
 function tool_adpe_extend_navigation_course(navigation_node $navigation) {
     global $USER, $COURSE;
 
-    if (!has_capability('tool/adpe:view', context_course::instance($COURSE->id), $USER->id))
+    if (!has_capability('tool/adpe:view', context_course::instance($COURSE->id), $USER->id)) {
         return;
+    }
 
     $navigation->add(
             get_string('pluginname', 'tool_adpe'),
