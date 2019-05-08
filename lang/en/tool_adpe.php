@@ -42,5 +42,7 @@ $string['header_sqltableall'] = '<h4>This is the plugin data table for all cours
 $string['output_sqltable_yes'] = "Yes";
 $string['output_sqltable_no'] = "No";
 $string['output_entryadded'] = 'Entry successful added.';
+$string['output_entrycopied'] = 'Entry successful copied.';
+$string['output_entrydeleted'] = 'Entry successful deleted.';
 $string['output_entryupdated'] = 'Entry successful updated.';
 $string['output_entryexists'] = 'Course shortname exists already in an entry.';

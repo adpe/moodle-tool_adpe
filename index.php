@@ -25,6 +25,8 @@ require_once($CFG->libdir.'/adminlib.php');
 
 $entryid = optional_param('entryid', 0, PARAM_INT);
 $courseid = optional_param('courseid', 0, PARAM_INT);
+$action = optional_param('action', '', PARAM_ALPHA);
+$confirm = optional_param('confirm', false, PARAM_BOOL);
 
 // Validate course id.
 if (empty($courseid)) {
@@ -52,7 +54,49 @@ if (empty($courseid)) {
     admin_externalpage_setup('tooladpeeditcourses', '', null, '', array('pagelayout' => 'report'));
 }
 
-echo $OUTPUT->header();
+// Copy/delete rule if needed.
+if (!empty($action) && $entryid) {
+    require_sesskey();
+
+    // If the entry does not exist, then redirect back as the entry must have already been deleted.
+    if (!$entry = $DB->get_record('tool_adpe', array('id' => $entryid), '*', IGNORE_MISSING)) {
+        redirect(new moodle_url('/admin/tool/adpe/index.php', array('courseid' => $courseid)));
+    }
+
+    echo $OUTPUT->header();
+    $entry = \tool_adpe\entry_manager::get_entry($entry);
+    switch ($action) {
+        case 'copy':
+            // No need to check for capability here as it is done at the start of the page.
+            $entry->duplicate_entry($courseid);
+            echo $OUTPUT->notification(get_string('output_entrycopied', 'tool_adpe'), 'notifysuccess');
+            break;
+        case 'delete':
+            if ($entry->can_manage_entry()) {
+                $confirmurl = new moodle_url($CFG->wwwroot. '/admin/tool/adpe/index.php',
+                        array('entryid' => $entryid, 'courseid' => $courseid, 'action' => 'delete',
+                                'confirm' => true, 'sesskey' => sesskey()));
+                $cancelurl = new moodle_url($CFG->wwwroot. '/admin/tool/adpe/index.php',
+                        array('courseid' => $courseid));
+                if ($confirm) {
+                    $entry->delete_entry();
+                    echo $OUTPUT->notification(get_string('output_entrydeleted', 'tool_adpe'), 'notifysuccess');
+                } else {
+                    $strconfirm = get_string('areyousure', 'core', $entry->get_name($context));
+                    echo $OUTPUT->confirm($strconfirm, $confirmurl, $cancelurl);
+                    echo $OUTPUT->footer();
+                    exit();
+                }
+            } else {
+                // User doesn't have permissions. Should never happen for real users.
+                throw new moodle_exception('rulenopermissions', 'tool_adpe', $manageurl, $action);
+            }
+            break;
+        default:
+    }
+} else {
+    echo $OUTPUT->header();
+}
 
 // Render the intro.
 $renderable = new \tool_adpe\output\intro\renderable($coursename, get_string('sometext', 'tool_adpe'));

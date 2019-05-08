@@ -150,6 +150,19 @@ class renderable extends \table_sql implements \renderable {
             $manage .= \html_writer::link($editurl, $icon, array('class' => 'action-icon'));
         }
 
+        // The user should always be able to copy the rule if they are able to view the page.
+        $copyurl = new \moodle_url($CFG->wwwroot. '/admin/tool/adpe/index.php',
+                array('entryid' => $entry->id, 'action' => 'copy', 'courseid' => $this->courseid, 'sesskey' => sesskey()));
+        $icon = $OUTPUT->render(new \pix_icon('t/copy', get_string('duplicate')));
+        $manage .= \html_writer::link($copyurl, $icon, array('class' => 'action-icon'));
+
+        if ($this->hassystemcap || ($entry->courseid != 0)) {
+            $deleteurl = new \moodle_url($CFG->wwwroot. '/admin/tool/adpe/index.php', array('entryid' => $entry->id,
+                    'action' => 'delete', 'courseid' => $entry->courseid, 'sesskey' => sesskey()));
+            $icon = $OUTPUT->render(new \pix_icon('t/delete', get_string('delete')));
+            $manage .= \html_writer::link($deleteurl, $icon, array('class' => 'action-icon'));
+        }
+
         return $manage;
     }
 

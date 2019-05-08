@@ -85,11 +85,24 @@ class entry_manager {
 
         $entrydata->id = $DB->insert_record('tool_adpe', $entrydata);
 
-        if ($entrydata->id) {
-            notification::success(get_string('output_entryadded', 'tool_adpe'));
-        }
-
         return new entry($entrydata);
+    }
+
+    /**
+     * Delete a entry by entry id.
+     *
+     * @param int $entryid id of entry to be deleted.
+     *
+     * @return bool
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public static function delete_entry($entryid) {
+        global $DB;
+
+        $success = $DB->delete_records('tool_adpe', array('id' => $entryid));
+
+        return $success;
     }
 
     /**
@@ -102,7 +115,7 @@ class entry_manager {
      * @throws \dml_exception
      */
     public static function update_entry($entrydata) {
-        global $DB;
+        global $DB, $OUTPUT;
         if (!self::get_entry($entrydata->id)) {
             throw new \coding_exception('Invalid entry ID.');
         }
@@ -110,7 +123,7 @@ class entry_manager {
 
         $success = $DB->update_record('tool_adpe', $entrydata);
         if ($success) {
-            notification::info(get_string('output_entryupdated', 'tool_adpe'));
+            echo $OUTPUT->notification(get_string('output_entryupdated', 'tool_adpe'), 'notifysuccess');
         }
 
         return $success;

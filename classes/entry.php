@@ -62,7 +62,33 @@ class entry {
     public function can_manage_entry($userid = null) {
         $courseid = $this->courseid;
         $context = empty($courseid) ? \context_system::instance() : \context_course::instance($this->courseid);
-        return has_capability('tool/monitor:edit', $context, $userid);
+        return has_capability('tool/adpe:edit', $context, $userid);
+    }
+
+    /**
+     * API to duplicate a entry for a given courseid.
+     *
+     * @param int $finalcourseid Final course id.
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function duplicate_entry($finalcourseid) {
+        $entry = fullclone($this->entry);
+        unset($entry->id);
+        $entry->courseid = $finalcourseid;
+        $entry->name = $entry->name . '_copy';
+        $time = time();
+        $entry->timecreated = $time;
+        $entry->timemodified = $time;
+        entry_manager::add_entry($entry);
+    }
+
+    /**
+     * Delete this entry.
+     */
+    public function delete_entry() {
+        entry_manager::delete_entry($this->id);
     }
 
     /**
@@ -94,11 +120,11 @@ class entry {
     }
 
     /**
-     * Get properly formatted name of the rule associated.
+     * Get properly formatted name of the entry associated.
      *
      * @param \context $context context where this name would be displayed.
      *
-     * @return string Formatted name of the rule.
+     * @return string Formatted name of the entry.
      */
     public function get_name(\context $context) {
         return format_text($this->name, FORMAT_HTML, array('context' => $context));
