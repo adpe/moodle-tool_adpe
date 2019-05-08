@@ -15,27 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Renderer class for show info stuff.
+ *
  * @package   tool_adpe
  * @copyright 2018, Adrian Perez <p.adrian@gmx.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_adpe\output;
+namespace tool_adpe\output\intro;
 
 defined('MOODLE_INTERNAL') || die;
 
-use plugin_renderer_base;
-
-class renderer extends plugin_renderer_base {
+class renderer extends \plugin_renderer_base {
     /**
      * Defer to template.
      *
-     * @param index_page $page
+     * @param renderable $renderable
      *
      * @return string html for the page
+     * @throws \moodle_exception
      */
-    public function render_index_page($page) {
-        $data = $page->export_for_template($this);
-        return parent::render_from_template('tool_adpe/index_page', $data);
+    public function render_renderable(renderable $renderable) {
+        $data = $renderable->export_for_template($this);
+        return parent::render_from_template('tool_adpe/intro', $data);
     }
 }

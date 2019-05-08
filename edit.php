@@ -15,12 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Page to handle the edit of course entries.
+ *
  * @package   tool_adpe
- * @copyright 2018, Adrian Perez <p.adrian@gmx.ch>
+ * @copyright 2019, Adrian Perez <p.adrian@gmx.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use tool_adpe\entry_manager;
+
 require_once(__DIR__ . '/../../../config.php');
+require_once(__DIR__ . '/lib.php');
 require_once($CFG->libdir.'/adminlib.php');
 
 $entryid = optional_param('entryid', 0, PARAM_INT);
@@ -28,6 +33,7 @@ $courseid = optional_param('courseid', 0, PARAM_INT);
 
 // Validate course id.
 if (empty($courseid)) {
+    require_login();
     $context = context_system::instance();
     $coursename = format_string($SITE->fullname, true, array('context' => $context));
     $PAGE->set_context($context);
@@ -38,11 +44,12 @@ if (empty($courseid)) {
     $coursename = format_string($course->fullname, true, array('context' => $context));
 }
 
-require_capability('tool/adpe:view', $context, $USER->id);
+require_capability('tool/adpe:edit', $context, $USER->id);
 
 // Set up the page.
+$url = new moodle_url("/admin/tool/adpe/edit.php", array('courseid' => $courseid));
 $manageurl = new moodle_url("/admin/tool/adpe/index.php", array('courseid' => $courseid));
-$PAGE->set_url($manageurl);
+$PAGE->set_url($url);
 $PAGE->set_pagelayout('report');
 $PAGE->set_title($coursename);
 $PAGE->set_heading($coursename);
@@ -50,22 +57,51 @@ $PAGE->set_heading($coursename);
 // Site level report.
 if (empty($courseid)) {
     admin_externalpage_setup('tooladpeeditcourses', '', null, '', array('pagelayout' => 'report'));
+} else {
+    // Course level report.
+    $PAGE->navigation->override_active_url($manageurl);
+}
+
+// Add form.
+if (!empty($entryid)) {
+    $entry = entry_manager::get_entry($entryid)->get_mform_set_data();
+} else {
+    $entry = new stdClass();
+}
+
+$mform = new tool_adpe\edit_form(null, array('entry' => $entry, 'courseid' => $courseid));
+
+if ($mform->is_cancelled()) {
+    redirect(new moodle_url('/admin/tool/adpe/index.php', array('courseid' => $courseid)));
+    exit();
+} else if ($mformdata = $mform->get_data()) {
+    $entry = entry_manager::clean_entrydata_form($mformdata);
+
+    if (empty($entry->id)) {
+        entry_manager::add_entry($entry);
+    } else {
+        entry_manager::update_entry($entry);
+    }
+
+    redirect($manageurl);
+} else {
+    echo $OUTPUT->header();
+    $mform->set_data($entry);
+    $mform->display();
+    echo $OUTPUT->footer();
+    exit;
 }
 
 echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('header_form', 'tool_adpe'));
 
-// Render the intro.
-$renderable = new \tool_adpe\output\intro\renderable($coursename, get_string('sometext', 'tool_adpe'));
-$renderer = $PAGE->get_renderer('tool_adpe', 'intro');
-echo $renderer->render($renderable);
+$mform->set_data($entry);
 
-echo $OUTPUT->heading(get_string('header_simpledb', 'tool_adpe'));
-echo get_string('output_simpledb', 'tool_adpe');
+if (!empty($entry->id)) {
+    echo $OUTPUT->heading(get_string('editrule', 'tool_monitor'));
+} else {
+    echo $OUTPUT->heading(get_string('addrule', 'tool_monitor'));
+}
 
-// Render the course list.
-echo $OUTPUT->heading(get_string('header_sqltable', 'tool_adpe'));
-$renderable = new \tool_adpe\output\editcourses\renderable('tooladpeeditcourses', $manageurl, $courseid, 20);
-$renderer = $PAGE->get_renderer('tool_adpe', 'editcourses');
-echo $renderer->render($renderable);
-
+$mform->display();
 echo $OUTPUT->footer();

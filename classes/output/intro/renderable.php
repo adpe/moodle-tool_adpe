@@ -15,21 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Renderable class for intro stuff.
+ *
  * @package   tool_adpe
  * @copyright 2018, Adrian Perez <p.adrian@gmx.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_adpe\output;
+namespace tool_adpe\output\intro;
 
 defined('MOODLE_INTERNAL') || die;
 
-use renderable;
-use renderer_base;
-use templatable;
-use stdClass;
-
-class index_page implements renderable, templatable {
+class renderable implements \renderable, \templatable {
     // Strings to show how to pass data to a template.
     private $heading = null;
     private $sometext = null;
@@ -42,10 +39,12 @@ class index_page implements renderable, templatable {
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
-     * @return stdClass
+     * @param \renderer_base $output
+     *
+     * @return \stdClass
      */
-    public function export_for_template(renderer_base $output) {
-        $data = new stdClass();
+    public function export_for_template(\renderer_base $output) {
+        $data = new \stdClass();
         $data->heading = $this->heading;
         $data->sometext = $this->sometext;
         return $data;

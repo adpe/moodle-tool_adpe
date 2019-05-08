@@ -21,10 +21,12 @@
  * @copyright 2018, Adrian Perez <p.adrian@gmx.ch>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) { // Needs this condition or there is error on login page.
-    $ADMIN->add('server', new admin_externalpage('tool_adpe',
+    $ADMIN->add('server', new admin_externalpage('tooladpeeditcourses',
             get_string('pluginname', 'tool_adpe'),
-            new moodle_url('/admin/tool/adpe/index.php')));
+            new moodle_url('/admin/tool/adpe/index.php', array('courseid' => 0)),
+            'tool/adpe:view'));
 }
