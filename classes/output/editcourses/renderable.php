@@ -75,11 +75,20 @@ class renderable extends \table_sql implements \renderable {
         $this->define_baseurl($url);
     }
 
+    /**
+     * Get formatted course name.
+     *
+     * @param \tool_adpe\entry $entry object
+     *
+     * @return string
+     */
     public function col_name(\tool_adpe\entry $entry) {
         return $entry->get_name($this->context);
     }
 
     /**
+     * Show the completed status as string.
+     *
      * @param  \tool_adpe\entry $entry object
      *
      * @return string
@@ -91,6 +100,30 @@ class renderable extends \table_sql implements \renderable {
         } else {
             return get_string('output_sqltable_no', 'tool_adpe');
         }
+    }
+
+    /**
+     * Get human readable timestamp for timecreated.
+     *
+     * @param \tool_adpe\entry $entry object
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function col_timecreated(\tool_adpe\entry $entry) {
+        return $entry->get_timecreated($this->context);
+    }
+
+    /**
+     * Get human readable timestamp for timemodified.
+     *
+     * @param \tool_adpe\entry $entry object
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function col_timemodified(\tool_adpe\entry $entry) {
+        return $entry->get_timemodified($this->context);
     }
 
     /**
@@ -131,8 +164,13 @@ class renderable extends \table_sql implements \renderable {
     public function query_db($pagesize, $useinitialsbar = true) {
         $total = \tool_adpe\entry_manager::count_entries_by_courseid($this->courseid);
         $this->pagesize($pagesize, $total);
-        $entries = \tool_adpe\entry_manager::get_entries_by_courseid($this->courseid, $this->get_page_start(),
-                $this->get_page_size(), false);
+
+        if ($this->courseid == 0) {
+            $entries = \tool_adpe\entry_manager::get_all_entries($this->get_page_start(), $this->get_page_size());
+        } else {
+            $entries = \tool_adpe\entry_manager::get_entries_by_courseid($this->courseid, $this->get_page_start(),
+                    $this->get_page_size(), false);
+        }
         $this->rawdata = $entries;
         // Set initial bars.
         if ($useinitialsbar) {

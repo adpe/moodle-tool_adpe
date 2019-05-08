@@ -86,7 +86,7 @@ class edit_form extends \moodleform {
 
         if (empty($data['entryid'])) {
             $errors = array();
-            if ($DB->record_exists('tool_adpe', array('courseid' => $data['courseid']))) {
+            if ($DB->record_exists('tool_adpe', array('courseid' => $data['courseid'], 'name' => $data['name']))) {
                 array_push($errors, notification::warning(get_string('output_entryexists', 'tool_adpe')));
             }
 

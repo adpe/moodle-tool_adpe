@@ -38,7 +38,9 @@ class entry_manager {
      */
     public static function clean_entrydata_form($mformdata) {
         $entry = new \stdClass();
-        $entry->id = $mformdata->entryid;
+        if (isset($mformdata->entryid)) {
+            $entry->id = $mformdata->entryid;
+        }
         $entry->courseid = $mformdata->courseid;
         $entry->name = $mformdata->name;
         $entry->completed = $mformdata->completed;
@@ -112,6 +114,24 @@ class entry_manager {
         }
 
         return $success;
+    }
+
+    /**
+     * Get all entries.
+     *
+     * @param int $limitfrom Limit from which to fetch entries.
+     * @param int $limitto Limit to which entries need to be fetched.
+     * @param bool $includesite Determines whether we return site wide entries or not.
+     *
+     * @return array List of entries for the given course id, if specified will also include site entries.
+     * @throws \dml_exception
+     */
+    public static function get_all_entries($limitfrom = 0, $limitto = 0) {
+        global $DB;
+
+        $orderby = 'courseid DESC, name ASC';
+
+        return self::get_instances($DB->get_records('tool_adpe', null, $orderby, '*', $limitfrom, $limitto));
     }
 
     /**

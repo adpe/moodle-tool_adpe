@@ -103,4 +103,28 @@ class entry {
     public function get_name(\context $context) {
         return format_text($this->name, FORMAT_HTML, array('context' => $context));
     }
+
+    /**
+     * Get timecreated formatted as human readable.
+     *
+     * @param \context $context
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function get_timecreated() {
+        return userdate($this->timecreated);
+    }
+
+    /**
+     * Get timemodified formatted as human readable.
+     *
+     * @param \context $context
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function get_timemodified() {
+        return userdate($this->timemodified);
+    }
 }
