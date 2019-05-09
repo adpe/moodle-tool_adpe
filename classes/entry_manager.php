@@ -73,7 +73,6 @@ class entry_manager {
      * @param \stdClass $entrydata data to insert as new entry entry.
      *
      * @return entry An instance of entry class.
-     * @throws \coding_exception
      * @throws \dml_exception
      */
     public static function add_entry($entrydata) {
@@ -100,13 +99,11 @@ class entry_manager {
     public static function delete_entry($entryid) {
         global $DB;
 
-        $success = $DB->delete_records('tool_adpe', array('id' => $entryid));
-
-        return $success;
+        return $DB->delete_records('tool_adpe', array('id' => $entryid));
     }
 
     /**
-     * Update entry data.
+     * Update entry  data.
      *
      * @param object $entrydata entry data to be updated.
      *
@@ -115,18 +112,14 @@ class entry_manager {
      * @throws \dml_exception
      */
     public static function update_entry($entrydata) {
-        global $DB, $OUTPUT;
+        global $DB;
         if (!self::get_entry($entrydata->id)) {
             throw new \coding_exception('Invalid entry ID.');
         }
+        unset($entrydata->courseid);
         $entrydata->timemodified = time();
 
-        $success = $DB->update_record('tool_adpe', $entrydata);
-        if ($success) {
-            echo $OUTPUT->notification(get_string('output_entryupdated', 'tool_adpe'), 'notifysuccess');
-        }
-
-        return $success;
+        return $DB->update_record('tool_adpe', $entrydata);
     }
 
     /**

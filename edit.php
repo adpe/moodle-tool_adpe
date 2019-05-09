@@ -79,11 +79,13 @@ if ($mform->is_cancelled()) {
 
     if (empty($entry->id)) {
         entry_manager::add_entry($entry);
+        redirect($manageurl, get_string('output_entryadded', 'tool_adpe'), null,
+                \core\output\notification::NOTIFY_SUCCESS);
     } else {
         entry_manager::update_entry($entry);
+        redirect($manageurl, get_string('output_entryupdated', 'tool_adpe'), null,
+                \core\output\notification::NOTIFY_SUCCESS);
     }
-
-    redirect($manageurl);
 } else {
     echo $OUTPUT->header();
     $mform->set_data($entry);
