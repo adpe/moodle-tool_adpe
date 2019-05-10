@@ -33,7 +33,7 @@ function tool_adpe_extend_navigation_course(navigation_node $navigation) {
 
     $navigation->add(
             get_string('pluginname', 'tool_adpe'),
-            new moodle_url('/admin/tool/adpe/index.php', ['id' => $COURSE->id]),
+            new moodle_url('/admin/tool/adpe/index.php', ['courseid' => $COURSE->id]),
             navigation_node::TYPE_SETTING,
             get_string('pluginname', 'tool_adpe'),
             'adpe',
