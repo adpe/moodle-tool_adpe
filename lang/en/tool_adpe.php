@@ -28,6 +28,7 @@ $string['pluginname'] = 'My first Moodle admin plugin';
 $string['adpe:view'] = 'View tool/adpe plugin page.';
 $string['adpe:edit'] = 'Edit tool/adpe plugin page.';
 $string['sometext'] = 'This is my first try with mustache template.';
+$string['editentrytitle'] = 'Edit entry {$a}';
 $string['header_courseid'] = '<h4>This is a simple text output with a variable:</h4>';
 $string['output_courseid'] = 'The site was open from course with id: <b>{$a}.</b>';
 $string['header_simpledb'] = '<h4>This is a simple DB output of all users on this Moodle platform:</h4>';

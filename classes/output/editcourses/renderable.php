@@ -146,7 +146,8 @@ class renderable extends \table_sql implements \renderable {
         if ($this->hassystemcap || ($entry->courseid != 0)) {
             $editurl = new \moodle_url($CFG->wwwroot. '/admin/tool/adpe/edit.php', array('entryid' => $entry->id,
                     'courseid' => $entry->courseid, 'sesskey' => sesskey()));
-            $icon = $OUTPUT->render(new \pix_icon('t/edit', get_string('edit')));
+            $icon = $OUTPUT->render(new \pix_icon('t/edit',
+                    get_string('editentrytitle', 'tool_adpe', format_string($entry->name))));
             $manage .= \html_writer::link($editurl, $icon, array('class' => 'action-icon'));
         }
 
